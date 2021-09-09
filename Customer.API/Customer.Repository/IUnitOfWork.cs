@@ -9,6 +9,5 @@ namespace Customer.Repository
         IAddressRepository AddressRepo { get; }
         IContactInformationRepository ContactInformationRepo { get; }
         ICustomerRepository CustomerRepo{ get; }
-
     }
 }

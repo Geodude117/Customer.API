@@ -27,7 +27,7 @@ namespace Customer.Business.Customer
             return _CustomerRepository.GetAsync(id);
         }
 
-        public Task<Guid> InsertAsync(Models.ContactInformation model)
+        public Task<Guid> InsertAsync(Models.Customer model)
         {
             //TODO : ADD INSERT LOGIC
             throw new NotImplementedException();

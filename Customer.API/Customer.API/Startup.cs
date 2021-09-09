@@ -1,20 +1,13 @@
 using Customer.Business.Address;
 using Customer.Business.ContactInformation;
+using Customer.Business.Customer;
 using Customer.Repository;
-using Customer.Repository.Customer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Customer.API
 {
@@ -33,7 +26,7 @@ namespace Customer.API
             services.AddTransient<IUnitOfWork>(connection => new UnitOfWork(Configuration.GetConnectionString("DbConnection")));
             services.AddTransient<IAddressBusiness, AddressBusiness>();
             services.AddTransient<IContactInfomationBusiness, ContactInfomationBusiness>();
-            services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<ICustomerBusiness, CustomerBusiness>();
 
             services.AddSingleton<IConfiguration>(x => Configuration);
 

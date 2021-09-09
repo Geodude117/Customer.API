@@ -41,7 +41,7 @@ namespace Customer.Repository.Customer
             {
                 using (IDbConnection connection = Connection)
                 {
-                    return ((Models.Customer)await connection.QueryAsync<Models.Customer>("[dbo].[Customer_Get_By_Id]", new { Id }, commandType: CommandType.StoredProcedure));
+                    return (await connection.QueryAsync<Models.Customer>("[dbo].[Customer_Get_By_Id]", new { Id }, commandType: CommandType.StoredProcedure)).FirstOrDefault();
                 }
             }
             catch (SqlException ex)

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Customer.Repository.Address
 {
-    public class AddressRepository : Repository<Customer.Models.Address>, IAddressRepository
+    public class AddressRepository : Repository<Models.Address>, IAddressRepository
     {
         public AddressRepository(string connection) : base(connection)
         { }
