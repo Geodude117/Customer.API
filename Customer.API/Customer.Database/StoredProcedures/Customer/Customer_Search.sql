@@ -12,14 +12,14 @@ DECLARE @results TABLE (Id uniqueidentifier not null)
 	IF (@Forename is not null or @Surename is not null or @DateOfBirth is not null )
 	BEGIN
 		INSERT INTO @results
-			SELECT
-				rd.Id
+			SELECT TOP 100
+				CU.Id
 			FROM
-				dbo.Customer rd
+				dbo.Customer CU
 			WHERE
-				((@Forename is null) or (@Forename is not null and @Forename = rd.Forename))
-			and ((@Surename is null) or (@Surename is not null and @Surename = rd.Surename))
-			and ((@DateOfBirth is null) or (@DateOfBirth is not null and @DateOfBirth = rd.DateOfBirth))
+				(@Forename = CU.Forename)
+			or (@Surename = CU.Surename)
+			or (@DateOfBirth = CU.DateOfBirth)
 	END
 
 
@@ -36,3 +36,5 @@ DECLARE @results TABLE (Id uniqueidentifier not null)
 SELECT * FROM @results
 
 RETURN 0
+
+GO
