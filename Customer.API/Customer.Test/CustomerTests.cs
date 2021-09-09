@@ -27,7 +27,7 @@ namespace Customer.Test
         {
             CustomerBusiness customerBusiness = new CustomerBusiness(_unitOfWork, _configuration);
 
-            var customer = customerBusiness.GetAsync(Guid.NewGuid());
+            var customer = customerBusiness.GetAsync(Guid.Parse("1FA85F64-5717-4562-B3FC-2C963F66AFA6")).Result;
 
             Assert.IsNotNull(customer);
 
