@@ -66,5 +66,19 @@ namespace Customer.Business.Customer
 
             return Id;
         }
+
+        public async Task<IEnumerable<Models.Customer>> SearchAsync(string forename, string surename, string postcode, string emailAddress)
+        {
+            List<Models.Customer> customerList = new List<Models.Customer>();
+
+           var customerIds = await _CustomerRepository.Search(forename, surename, postcode, emailAddress);
+
+            foreach (var id in customerIds)
+            {
+                customerList.Add(await this.GetAsync(id));
+
+            }
+            return customerList;
+        }
     }
 }

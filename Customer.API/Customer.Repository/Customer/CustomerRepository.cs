@@ -14,11 +14,6 @@ namespace Customer.Repository.Customer
         public CustomerRepository(string connection) : base(connection)
         { }
 
-        public override Task<bool> DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public override async Task<Models.Customer> GetAsync(Guid Id)
         {
             try
@@ -69,14 +64,47 @@ namespace Customer.Repository.Customer
             }
         }
 
-        public override Task<Guid> InsertAsync(Guid id, Models.Customer entity)
+        public async Task<IEnumerable<Guid>> Search(string forename, string surename, string postcode, string emailAddress)
         {
-            throw new NotImplementedException();
+            List<Models.Customer> customers = new List<Models.Customer>();
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@Forename", value: forename, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@Surename", value: surename, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@DateOfBirth", value: postcode, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@EmailAddress", value: emailAddress, dbType: DbType.String, direction: ParameterDirection.Input);
+
+            try
+            {
+                using (IDbConnection connection = Connection)
+                {
+                    var customerids =  (await connection.QueryAsync<Guid>("[dbo].[Customer_Search]", parameters,
+                        commandType: CommandType.StoredProcedure)).DefaultIfEmpty();
+
+                    return customerids;
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+
         }
 
         public override Task<bool> UpdateAsync(Models.Customer entity)
         {
             throw new NotImplementedException();
         }
+
+        public override Task<Guid> InsertAsync(Guid id, Models.Customer entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<bool> DeleteAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

@@ -1,12 +1,8 @@
-﻿using Customer.Business.Address;
-using Customer.Business.ContactInformation;
-using Customer.Business.Customer;
-using Microsoft.AspNetCore.Http;
+﻿using Customer.Business.Customer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -20,13 +16,36 @@ namespace Customer.API.Controllers
 
         //Search for customer by forename, surname, postcode, or email address
 
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Models.Customer>>> Search([FromQuery] string forename, [FromQuery] string surename, [FromQuery] string postcode, [FromQuery] string emailAddress, [FromServices] ICustomerBusiness customerBusiness)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(forename) && string.IsNullOrEmpty(surename) &&
+                   string.IsNullOrEmpty(postcode) && string.IsNullOrEmpty(emailAddress))
+                {
+                    return new NotFoundObjectResult("No search parameters specified");
+                }
+
+                var searchResults = await customerBusiness.SearchAsync(forename, surename, postcode, emailAddress);
+
+                return new OkObjectResult(searchResults);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+
+            return new NotFoundObjectResult("No search parameters specified");
+        }
 
         //Retrieve customer by ID
         [HttpGet("{guid}")]
-        public async Task<Models.Customer> Get(Guid guid, [FromServices] ICustomerBusiness customerBusiness)
+        public async Task<ActionResult<Models.Customer>> Get(Guid guid, [FromServices] ICustomerBusiness customerBusiness)
         {
             var customer = await customerBusiness.GetAsync(guid);
-            return customer;
+            return new OkObjectResult(customer);
         }
 
         //Create a new customer

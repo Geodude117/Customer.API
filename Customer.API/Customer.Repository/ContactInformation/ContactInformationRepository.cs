@@ -13,11 +13,6 @@ namespace Customer.Repository.ContactInformation
         public ContactInformationRepository(string connection) : base(connection)
         { }
 
-        public override Task<bool> DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IEnumerable<Models.ContactInformation>> Get(Guid CustomerId)
         {
             try
@@ -82,6 +77,12 @@ namespace Customer.Repository.ContactInformation
             throw new NotImplementedException();
         }
 
-      
+        public override Task<bool> DeleteAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
     }
 }

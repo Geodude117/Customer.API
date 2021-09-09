@@ -14,11 +14,6 @@ namespace Customer.Repository.Address
         public AddressRepository(string connection) : base(connection)
         { }
 
-        public override Task<bool> DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public override async Task<Models.Address> GetAsync(Guid CustomerId)
         {
             try
@@ -76,6 +71,11 @@ namespace Customer.Repository.Address
         }
 
         public override Task<bool> UpdateAsync(Models.Address entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<bool> DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
