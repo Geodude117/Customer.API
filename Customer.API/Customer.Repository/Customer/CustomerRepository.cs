@@ -42,7 +42,7 @@ namespace Customer.Repository.Customer
             parameters.Add("@Forename", value: entity.ForeName, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@Surename", value: entity.Surename, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@DateOfBirth", value: entity.DateOfBirth, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@CustomerId", value: entity.Address.CustomerId, dbType: DbType.Guid, direction: ParameterDirection.Input);
+            parameters.Add("@CustomerId", value: entity.Id, dbType: DbType.Guid, direction: ParameterDirection.Input);
 
             try
             {
@@ -67,6 +67,11 @@ namespace Customer.Repository.Customer
                 transactionopen.Rollback();
                 throw ex;
             }
+        }
+
+        public override Task<Guid> InsertAsync(Guid id, Models.Customer entity)
+        {
+            throw new NotImplementedException();
         }
 
         public override Task<bool> UpdateAsync(Models.Customer entity)

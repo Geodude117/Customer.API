@@ -21,6 +21,8 @@ namespace Customer.Repository
 
         public abstract Task<Guid> InsertAsync(T entity);
 
+        public abstract Task<Guid> InsertAsync(Guid id, T entity);
+
         public abstract Task<bool> UpdateAsync(T entity);
 
         public abstract Task<bool> DeleteAsync(Guid id);

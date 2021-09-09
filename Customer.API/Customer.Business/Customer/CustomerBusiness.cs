@@ -56,14 +56,12 @@ namespace Customer.Business.Customer
             var Id = await _CustomerRepository.InsertAsync(model);
 
             //ADD ADDRESS
-            model.Address.CustomerId = model.Id;
-            var id = await _AddressRepository.InsertAsync(model.Address);
+            var id = await _AddressRepository.InsertAsync(Id, model.Address);
 
             //ADD CONTACT INFO
             foreach (var contactInfo in model.ContactInformation)
             {
-                contactInfo.CustomerId = model.Id;
-                var guid = _ContactInformationRepository.InsertAsync(contactInfo);
+                var guid = _ContactInformationRepository.InsertAsync(Id, contactInfo);
             }
 
             return Id;

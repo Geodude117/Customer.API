@@ -38,14 +38,14 @@ namespace Customer.Repository.ContactInformation
             throw new NotImplementedException();
         }
 
-        public override async Task<Guid> InsertAsync(Models.ContactInformation entity)
+        public override async Task<Guid> InsertAsync(Guid guid, Models.ContactInformation entity)
         {
             IDbTransaction transactionopen = null;
             var parameters = new DynamicParameters();
 
             parameters.Add("@Type", value: entity.Type, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@Value", value: entity.Value, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@CustomerId", value: entity.CustomerId, dbType: DbType.Guid, direction: ParameterDirection.Input);
+            parameters.Add("@CustomerId", value: guid, dbType: DbType.Guid, direction: ParameterDirection.Input);
 
             try
             {
@@ -70,6 +70,11 @@ namespace Customer.Repository.ContactInformation
                 transactionopen.Rollback();
                 throw ex;
             }
+        }
+
+        public override Task<Guid> InsertAsync(Models.ContactInformation entity)
+        {
+            throw new NotImplementedException();
         }
 
         public override Task<bool> UpdateAsync(Models.ContactInformation entity)

@@ -34,7 +34,7 @@ namespace Customer.Repository.Address
             }
         }
 
-        public override async Task<Guid> InsertAsync(Models.Address entity)
+        public override async Task<Guid> InsertAsync(Guid id, Models.Address entity)
         {
             IDbTransaction transactionopen = null;
             var parameters = new DynamicParameters();
@@ -43,7 +43,7 @@ namespace Customer.Repository.Address
             parameters.Add("@Street", value: entity.Street, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@City", value: entity.City, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@PostCode", value: entity.Postcode, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@CustomerId", value: entity.CustomerId, dbType: DbType.Guid, direction: ParameterDirection.Input);
+            parameters.Add("@CustomerId", value: id, dbType: DbType.Guid, direction: ParameterDirection.Input);
 
             try
             {
@@ -68,6 +68,11 @@ namespace Customer.Repository.Address
                 transactionopen.Rollback();
                 throw ex;
             }
+        }
+
+        public override Task<Guid> InsertAsync(Models.Address entity)
+        {
+            throw new NotImplementedException();
         }
 
         public override Task<bool> UpdateAsync(Models.Address entity)
