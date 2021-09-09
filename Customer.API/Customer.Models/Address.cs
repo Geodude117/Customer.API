@@ -1,0 +1,19 @@
+﻿using System;
+
+namespace Customer.Models
+{
+    public class Address
+    {
+        public Address()
+        {
+          
+        }
+
+        public int Id { get; set; }
+        public Guid CustomerId { get; set; }
+        public int HouseNo { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string Postcode { get; set; }
+    }
+}
