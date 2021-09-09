@@ -19,14 +19,13 @@ namespace Customer.Repository.Address
             throw new NotImplementedException();
         }
 
-        public override async Task<IEnumerable<Models.Address>> GetAllAsync()
+        public override async Task<Models.Address> GetAsync(Guid CustomerId)
         {
             try
             {
                 using (IDbConnection connection = Connection)
                 {
-                    return (await connection.QueryAsync<Models.Address>("[dbo].[Address_Get_All]",
-                        commandType: CommandType.StoredProcedure)).DefaultIfEmpty();
+                    return (await connection.QueryAsync<Models.Address>("[dbo].[Address_Get_By_CustomerId]", new { CustomerId }, commandType: CommandType.StoredProcedure)).FirstOrDefault();
                 }
             }
             catch (SqlException ex)
@@ -35,14 +34,40 @@ namespace Customer.Repository.Address
             }
         }
 
-        public override Task<Models.Address> GetAsync(Guid id)
+        public override async Task<Guid> InsertAsync(Models.Address entity)
         {
-            throw new NotImplementedException();
-        }
+            IDbTransaction transactionopen = null;
+            var parameters = new DynamicParameters();
 
-        public override Task<Guid> InsertAsync(Models.Address entity)
-        {
-            throw new NotImplementedException();
+            parameters.Add("@HouseNo", value: entity.HouseNo, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            parameters.Add("@Street", value: entity.Street, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@City", value: entity.City, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@PostCode", value: entity.Postcode, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@CustomerId", value: entity.CustomerId, dbType: DbType.Guid, direction: ParameterDirection.Input);
+
+            try
+            {
+                using (IDbConnection connection = Connection)
+                {
+                    connection.Open();
+                    using (transactionopen = connection.BeginTransaction())
+                    {
+                        var result = (await transactionopen.Connection.ExecuteAsync("[dbo].[Address_Insert]",
+                            parameters,
+                            commandType: CommandType.StoredProcedure,
+                            transaction: transactionopen));
+                        transactionopen.Commit();
+
+                        return parameters.Get<Guid>("@CustomerId");
+                        ;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                transactionopen.Rollback();
+                throw ex;
+            }
         }
 
         public override Task<bool> UpdateAsync(Models.Address entity)

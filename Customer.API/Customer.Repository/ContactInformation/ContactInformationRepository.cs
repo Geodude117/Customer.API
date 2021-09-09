@@ -18,22 +18,6 @@ namespace Customer.Repository.ContactInformation
             throw new NotImplementedException();
         }
 
-        public override async Task<IEnumerable<Models.ContactInformation>> GetAllAsync()
-        {
-            try
-            {
-                using (IDbConnection connection = Connection)
-                {
-                    return (await connection.QueryAsync<Models.ContactInformation>("[dbo].[CustomerInformation_Get_All]",
-                        commandType: CommandType.StoredProcedure)).DefaultIfEmpty();
-                }
-            }
-            catch (SqlException ex)
-            {
-                throw ex;
-            }
-        }
-
         public async Task<IEnumerable<Models.ContactInformation>> Get(Guid CustomerId)
         {
             try

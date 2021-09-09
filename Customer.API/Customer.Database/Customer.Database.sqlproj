@@ -66,15 +66,12 @@
     <Build Include="Tables\Customer.sql" />
     <Build Include="Tables\Address.sql" />
     <Build Include="Tables\ContactInformation.sql" />
-    <Build Include="StoredProcedures\Address\Address_Get_All.sql" />
     <Build Include="StoredProcedures\Address\Address_Insert.sql" />
     <Build Include="StoredProcedures\ContactInformation\ContactInformation_Insert.sql" />
     <Build Include="StoredProcedures\Customer\Customer_Delete_By_Id.sql" />
-    <Build Include="StoredProcedures\Customer\Customer_Get_All.sql" />
     <Build Include="StoredProcedures\Customer\Customer_Get_By_Id.sql" />
     <Build Include="StoredProcedures\Customer\Customer_Insert.sql" />
     <Build Include="StoredProcedures\ContactInformation\CustomerInformation_Delete_By_CustomerId.sql" />
-    <Build Include="StoredProcedures\ContactInformation\CustomerInformation_Get_All.sql" />
     <Build Include="StoredProcedures\ContactInformation\ContactInformation_Get_By_CustomerId.sql" />
     <Build Include="StoredProcedures\Address\Address_Get_By_CustomerId.sql" />
     <Build Include="StoredProcedures\Address\Address_Delete_By_CustomerId.sql" />

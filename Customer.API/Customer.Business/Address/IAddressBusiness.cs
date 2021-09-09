@@ -9,9 +9,6 @@ namespace Customer.Business.Address
 {
     public interface IAddressBusiness 
     {
-        Task<IEnumerable<Models.Address>> GetAllAsync();
-
         Task<Models.Address> GetAsync(Guid id);
-
     }
 }

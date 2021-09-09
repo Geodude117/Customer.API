@@ -17,8 +17,6 @@ namespace Customer.Repository
 
         public IDbConnection Connection => new SqlConnection(_connection);
 
-        public abstract Task<IEnumerable<T>> GetAllAsync();
-
         public abstract Task<T> GetAsync(Guid id);
 
         public abstract Task<Guid> InsertAsync(T entity);

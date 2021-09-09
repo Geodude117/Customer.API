@@ -18,11 +18,6 @@ namespace Customer.Business.Address
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<Models.Address>> GetAllAsync()
-        {
-            return await _addressRepositroy.GetAllAsync();
-        }
-
         public async Task<Models.Address> GetAsync(Guid id)
         {
             return await _addressRepositroy.GetAsync(id);

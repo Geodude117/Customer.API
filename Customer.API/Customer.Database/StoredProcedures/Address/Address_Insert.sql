@@ -17,5 +17,5 @@ AS
            ,@City
            ,@PostCode
            ,@CustomerId)
-RETURN SCOPE_IDENTITY()
+RETURN
 GO

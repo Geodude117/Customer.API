@@ -19,22 +19,6 @@ namespace Customer.Repository.Customer
             throw new NotImplementedException();
         }
 
-        public override async Task<IEnumerable<Models.Customer>> GetAllAsync()
-        {
-            try
-            {
-                using (IDbConnection connection = Connection)
-                {
-                    return (await connection.QueryAsync<Models.Customer>("[dbo].[Customer_Get_All]",
-                        commandType: CommandType.StoredProcedure)).DefaultIfEmpty();
-                }
-            }
-            catch (SqlException ex)
-            {
-                throw ex;
-            }
-        }
-
         public override async Task<Models.Customer> GetAsync(Guid Id)
         {
             try
@@ -58,10 +42,7 @@ namespace Customer.Repository.Customer
             parameters.Add("@Forename", value: entity.ForeName, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@Surename", value: entity.Surename, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@DateOfBirth", value: entity.DateOfBirth, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@HouseNo", value: entity.Address.HouseNo, dbType: DbType.UInt64, direction: ParameterDirection.Input);
-            parameters.Add("@Street", value: entity.Address.Street, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@City", value: entity.Address.City, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@PostCode", value: entity.Address.Postcode, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@CustomerId", value: entity.Address.CustomerId, dbType: DbType.Guid, direction: ParameterDirection.Input);
 
             try
             {

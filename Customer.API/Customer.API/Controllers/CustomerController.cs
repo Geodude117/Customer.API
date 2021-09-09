@@ -18,24 +18,29 @@ namespace Customer.API.Controllers
     {
         private readonly ILogger<CustomerController> _logger;
 
-        [HttpGet]
-        public async Task<IEnumerable<Models.Customer>> Get([FromServices] IAddressBusiness addressBusiness, [FromServices] IContactInfomationBusiness contactInfomationBusiness, [FromServices]  ICustomerBusiness customerBusiness)
+        //Search for customer by forename, surname, postcode, or email address
+
+
+        //Retrieve customer by ID
+        [HttpGet("{guid}")]
+        public async Task<Models.Customer> Get(Guid guid, [FromServices] ICustomerBusiness customerBusiness)
         {
-            var allContactInformation = await contactInfomationBusiness.GetAllAsync();
-            var contactInformation = await contactInfomationBusiness.GetAsync(Guid.Parse("D3DACD64-738D-4DC8-94BC-AA308067AF36"));
-
-            Models.ContactInformation entity = new Models.ContactInformation();
-
-            entity.Value = "Test";
-            entity.Type = "Geo";
-            entity.CustomerId = Guid.Parse("D3DACD64-738D-4DC8-94BC-AA308067AF36");
-
-            //var c = await contactInfomationBusiness.InsertAsync(entity);
-
-            var allCustomer = await customerBusiness.GetAllAsync();
-            var customer = await customerBusiness.GetAsync(Guid.Parse("D3DACD64-738D-4DC8-94BC-AA308067AF36"));
-
-            return allCustomer;
+            var customer = await customerBusiness.GetAsync(guid);
+            return customer;
         }
+
+        //Create a new customer
+        [HttpPost]
+        public async Task<Guid> Insert([FromBody] Models.Customer model, [FromServices] ICustomerBusiness customerBusiness)
+        {
+            var customer = await customerBusiness.InsertAsync(model);
+
+            return customer;
+        }
+
+        //Update an existing customer
+
+        //Delete a customer
+
     }
 }

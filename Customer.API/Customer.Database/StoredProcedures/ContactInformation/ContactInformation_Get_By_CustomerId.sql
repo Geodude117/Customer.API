@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[ContactInformation_Get_By_CustomerId]
-	@CustomerId uniqueidentifier,
-	@param2 int
+	@CustomerId uniqueidentifier
 AS
 	SELECT [Id]
       ,[Type]
