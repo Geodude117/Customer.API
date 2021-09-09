@@ -8,11 +8,13 @@ namespace Customer.Business.Customer
     {
         Task<Models.Customer> GetAsync(Guid id);
 
-        Task<Guid> InsertAsync(Models.Customer model);
+        Task<Guid?> InsertAsync(Models.Customer model);
 
         Task<IEnumerable<Models.Customer>> SearchAsync(string forename, string surename, string postcode, string emailAddress);
 
         Task<bool> DeleteAsync(Guid id);
+
+        Task<bool> UpdateAsync(Models.Customer model);
 
     }
 }

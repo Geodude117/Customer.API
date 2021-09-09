@@ -29,7 +29,7 @@ namespace Customer.Repository.Address
             }
         }
 
-        public override async Task<Guid> InsertAsync(Guid id, Models.Address entity)
+        public override async Task<Guid?> InsertAsync(Guid? id, Models.Address entity)
         {
             IDbTransaction transactionopen = null;
             var parameters = new DynamicParameters();
@@ -53,7 +53,7 @@ namespace Customer.Repository.Address
                             transaction: transactionopen));
                         transactionopen.Commit();
 
-                        return parameters.Get<Guid>("@CustomerId");
+                        return parameters.Get<Guid?>("@CustomerId");
                         ;
                     }
                 }
@@ -65,7 +65,7 @@ namespace Customer.Repository.Address
             }
         }
 
-        public override Task<Guid> InsertAsync(Models.Address entity)
+        public override Task<Guid?> InsertAsync(Models.Address entity)
         {
             throw new NotImplementedException();
         }

@@ -16,7 +16,7 @@ AS
            ,@Surename
            ,@DateOfBirth)
 
-RETURN 
+RETURN 1
 GO
 
 

@@ -75,5 +75,6 @@
     <Build Include="StoredProcedures\Address\Address_Get_By_CustomerId.sql" />
     <Build Include="StoredProcedures\Customer\Customer_Update_By_Id.sql" />
     <Build Include="StoredProcedures\Customer\Customer_Search.sql" />
+    <Build Include="StoredProcedures\ContactInformation\ContactInformation_Delete_By_Id.sql" />
   </ItemGroup>
 </Project>

@@ -55,7 +55,7 @@ namespace Customer.API.Controllers
 
         //Create a new customer
         [HttpPost]
-        public async Task<Guid> Insert([FromBody] Models.Customer model, [FromServices] ICustomerBusiness customerBusiness)
+        public async Task<Guid?> Insert([FromBody] Models.Customer model, [FromServices] ICustomerBusiness customerBusiness)
         {
             var customer = await customerBusiness.InsertAsync(model);
 
@@ -79,5 +79,23 @@ namespace Customer.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        //Update a customer
+        [HttpPut]
+        public async Task<ActionResult<Models.Customer>> Update([FromBody] Models.Customer model, [FromServices] ICustomerBusiness customerBusiness)
+        {
+            try
+            {
+                var customer = await customerBusiness.UpdateAsync(model);
+
+                return new OkObjectResult(customer);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
     }
 }

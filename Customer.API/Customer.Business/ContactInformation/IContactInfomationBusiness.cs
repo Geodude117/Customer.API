@@ -11,6 +11,6 @@ namespace Customer.Business.ContactInformation
 
         Task<IEnumerable<Models.ContactInformation>> GetAsync(Guid id);
 
-        Task<Guid> InsertAsync(Models.ContactInformation model);
+        Task<Guid?> InsertAsync(Models.ContactInformation model);
     }
 }

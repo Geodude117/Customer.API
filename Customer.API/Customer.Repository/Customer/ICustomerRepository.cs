@@ -8,5 +8,6 @@ namespace Customer.Repository.Customer
     {
         Task<IEnumerable<Guid>> Search(string forename, string surename, string postcode, string emailAddress);
         Task<bool> DeleteAsync(Guid id);
+
     }
 }

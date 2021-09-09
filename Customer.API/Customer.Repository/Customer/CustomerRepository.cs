@@ -29,7 +29,7 @@ namespace Customer.Repository.Customer
             }
         }
 
-        public override async Task<Guid> InsertAsync(Models.Customer entity)
+        public override async Task<Guid?> InsertAsync(Models.Customer entity)
         {
             IDbTransaction transactionopen = null;
             var parameters = new DynamicParameters();
@@ -47,13 +47,19 @@ namespace Customer.Repository.Customer
                     using (transactionopen = connection.BeginTransaction())
                     {
                         var result = (await transactionopen.Connection.ExecuteAsync("[dbo].[Customer_Insert]",
-                            parameters,
-                            commandType: CommandType.StoredProcedure,
-                            transaction: transactionopen));
+                           parameters,
+                           commandType: CommandType.StoredProcedure,
+                           transaction: transactionopen));
                         transactionopen.Commit();
 
-                        return parameters.Get<Guid>("@CustomerId");
-                        ;
+                        if (result == 1)
+                        {
+                            return parameters.Get<Guid>("@CustomerId");
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
                 }
             }
@@ -109,7 +115,6 @@ namespace Customer.Repository.Customer
                             parameters,
                             commandType: CommandType.StoredProcedure,
                             transaction: transactionopen)) != 0;
-                        transactionopen.Commit();
                     }
                 }
             }
@@ -120,17 +125,49 @@ namespace Customer.Repository.Customer
             }
         }
 
-        public override Task<bool> UpdateAsync(Models.Customer entity)
+        public override async Task<bool> UpdateAsync(Models.Customer entity)
+        {
+            IDbTransaction transactionopen = null;
+
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@CustomerId", value: entity.Id, dbType: DbType.Guid, direction: ParameterDirection.Input);
+            parameters.Add("@Forename", value: entity.ForeName, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@Surename", value: entity.Surename, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@HouseNo", value: entity.Address.HouseNo, dbType: DbType.Int32, direction: ParameterDirection.Input);
+            parameters.Add("@DateOfBirth", value: entity.DateOfBirth, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@Street", value: entity.Address.Street, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@City", value: entity.Address.City, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@Postcode", value: entity.Address.Postcode, dbType: DbType.String, direction: ParameterDirection.Input);
+
+            try
+            {
+                using (IDbConnection connection = Connection)
+                {
+                    connection.Open();
+                    using (transactionopen = connection.BeginTransaction())
+                    {
+                        var result = (await transactionopen.Connection.ExecuteAsync("[dbo].[Customer_Update_By_Id]",
+                            parameters,
+                            commandType: CommandType.StoredProcedure,
+                            transaction: transactionopen)) != 0;
+                        transactionopen.Commit();
+
+                        return result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                transactionopen.Rollback();
+                throw ex;
+            }
+        }
+
+
+        public override Task<Guid?> InsertAsync(Guid? id, Models.Customer entity)
         {
             throw new NotImplementedException();
         }
-
-        public override Task<Guid> InsertAsync(Guid id, Models.Customer entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        
-
     }
 }

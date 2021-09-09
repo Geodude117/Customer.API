@@ -50,7 +50,7 @@ namespace Customer.Business.Customer
             return customer;
         }
 
-        public async Task<Guid> InsertAsync(Models.Customer model)
+        public async Task<Guid?> InsertAsync(Models.Customer model)
         {
             //ADD CUSTOMER 
             var Id = await _CustomerRepository.InsertAsync(model);
@@ -84,8 +84,40 @@ namespace Customer.Business.Customer
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            var result = await _CustomerRepository.DeleteAsync(id);
-            return result;
+            return await _CustomerRepository.DeleteAsync(id);
+        }
+
+        public async Task<bool> UpdateAsync(Models.Customer model)
+        {
+            //CHECK IF THE THERE ARE ANY DIFFERENCES IF NOT RETURN FALSE
+
+            var oldCustomer = await this.GetAsync(model.Id.Value);
+            var result = model.CompareTo(oldCustomer) > 0;
+            if (!result)
+                return result;
+
+            //PERFOM UPDATE
+
+            List<Task<bool>> TaskList = new List<Task<bool>>
+            {
+                //UPDATE CUSTOMER AND ADDRESS RECORDS
+                _CustomerRepository.UpdateAsync(model),
+                //DELETE CONTACT INFO  
+                _ContactInformationRepository.DeleteAsync(model.Id.Value)
+            };
+
+            var updateResults = TaskSummary.TaskBoolSummary(await Task.WhenAll(TaskList));
+
+            //INSERT NEW CONTACT INFO
+            foreach (var contactInfo in model.ContactInformation)
+            {
+                if (await _ContactInformationRepository.InsertAsync(model.Id, contactInfo) == null)
+                {
+                    updateResults = false;
+                }
+            }
+
+            return updateResults;
         }
     }
 }

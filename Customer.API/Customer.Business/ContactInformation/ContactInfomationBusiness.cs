@@ -25,7 +25,7 @@ namespace Customer.Business.ContactInformation
             return _ContactInformationRepository.Get(id);
         }
 
-        public Task<Guid> InsertAsync(Models.ContactInformation model)
+        public Task<Guid?> InsertAsync(Models.ContactInformation model)
         {
             return _ContactInformationRepository.InsertAsync(model);
 

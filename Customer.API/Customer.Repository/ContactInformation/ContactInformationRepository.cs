@@ -13,6 +13,8 @@ namespace Customer.Repository.ContactInformation
         public ContactInformationRepository(string connection) : base(connection)
         { }
 
+       
+
         public async Task<IEnumerable<Models.ContactInformation>> Get(Guid CustomerId)
         {
             try
@@ -28,12 +30,7 @@ namespace Customer.Repository.ContactInformation
             }
         }
 
-        public override Task<Models.ContactInformation> GetAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override async Task<Guid> InsertAsync(Guid guid, Models.ContactInformation entity)
+        public override async Task<Guid?> InsertAsync(Guid? guid, Models.ContactInformation entity)
         {
             IDbTransaction transactionopen = null;
             var parameters = new DynamicParameters();
@@ -52,11 +49,17 @@ namespace Customer.Repository.ContactInformation
                         var result = (await transactionopen.Connection.ExecuteAsync("[dbo].[ContactInformation_Insert]",
                             parameters,
                             commandType: CommandType.StoredProcedure,
-                            transaction: transactionopen));
-                        transactionopen.Commit();
+                            transaction: transactionopen)) != 0;
 
-                        return parameters.Get<Guid>("@CustomerId");
-                        ;
+                        if (result)
+                        {
+                            return parameters.Get<Guid>("@CustomerId");
+
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
                 }
             }
@@ -67,7 +70,42 @@ namespace Customer.Repository.ContactInformation
             }
         }
 
-        public override Task<Guid> InsertAsync(Models.ContactInformation entity)
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            IDbTransaction transactionopen = null;
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@CustomerId", value: id, dbType: DbType.Guid, direction: ParameterDirection.Input);
+
+            try
+            {
+                using (IDbConnection connection = Connection)
+                {
+                    connection.Open();
+                    using (transactionopen = connection.BeginTransaction())
+                    {
+                        var result =  (await transactionopen.Connection.ExecuteAsync("[dbo].[ContactInformation_Delete_By_Id]",
+                            parameters,
+                            commandType: CommandType.StoredProcedure,
+                            transaction: transactionopen)) != 0;
+                        transactionopen.Commit();
+                        return result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                transactionopen.Rollback();
+                throw ex;
+            }
+        }
+
+        public override Task<Models.ContactInformation> GetAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<Guid?> InsertAsync(Models.ContactInformation entity)
         {
             throw new NotImplementedException();
         }
