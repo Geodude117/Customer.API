@@ -80,5 +80,12 @@ namespace Customer.Business.Customer
             }
             return customerList;
         }
+
+
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            var result = await _CustomerRepository.DeleteAsync(id);
+            return result;
+        }
     }
 }

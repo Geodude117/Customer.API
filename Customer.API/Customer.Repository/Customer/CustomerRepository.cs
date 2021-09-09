@@ -91,6 +91,35 @@ namespace Customer.Repository.Customer
 
         }
 
+        public async Task<bool> DeleteAsync(Guid CustomerId)
+        {
+            IDbTransaction transactionopen = null;
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@CustomerId", value: CustomerId, dbType: DbType.Guid, direction: ParameterDirection.Input);
+
+            try
+            {
+                using (IDbConnection connection = Connection)
+                {
+                    connection.Open();
+                    using (transactionopen = connection.BeginTransaction())
+                    {
+                        return (await transactionopen.Connection.ExecuteAsync("[dbo].[Customer_Delete_By_Id]",
+                            parameters,
+                            commandType: CommandType.StoredProcedure,
+                            transaction: transactionopen)) != 0;
+                        transactionopen.Commit();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                transactionopen.Rollback();
+                throw ex;
+            }
+        }
+
         public override Task<bool> UpdateAsync(Models.Customer entity)
         {
             throw new NotImplementedException();
@@ -101,10 +130,7 @@ namespace Customer.Repository.Customer
             throw new NotImplementedException();
         }
 
-        public override Task<bool> DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        
 
     }
 }

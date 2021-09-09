@@ -77,12 +77,5 @@ namespace Customer.Repository.ContactInformation
             throw new NotImplementedException();
         }
 
-        public override Task<bool> DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
     }
 }

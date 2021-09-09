@@ -12,5 +12,7 @@ namespace Customer.Business.Customer
 
         Task<IEnumerable<Models.Customer>> SearchAsync(string forename, string surename, string postcode, string emailAddress);
 
+        Task<bool> DeleteAsync(Guid id);
+
     }
 }

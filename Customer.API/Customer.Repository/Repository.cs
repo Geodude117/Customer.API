@@ -25,6 +25,5 @@ namespace Customer.Repository
 
         public abstract Task<bool> UpdateAsync(T entity);
 
-        public abstract Task<bool> DeleteAsync(Guid id);
     }
 }

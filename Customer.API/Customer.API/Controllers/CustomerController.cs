@@ -35,17 +35,22 @@ namespace Customer.API.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-
-
-            return new NotFoundObjectResult("No search parameters specified");
         }
 
         //Retrieve customer by ID
-        [HttpGet("{guid}")]
+        [HttpGet("guid")]
         public async Task<ActionResult<Models.Customer>> Get(Guid guid, [FromServices] ICustomerBusiness customerBusiness)
         {
-            var customer = await customerBusiness.GetAsync(guid);
-            return new OkObjectResult(customer);
+            try
+            {
+                var customer = await customerBusiness.GetAsync(guid);
+
+                return new OkObjectResult(customer);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         //Create a new customer
@@ -60,6 +65,19 @@ namespace Customer.API.Controllers
         //Update an existing customer
 
         //Delete a customer
+        [HttpDelete]
+        public async Task<ActionResult<Models.Customer>> Delete(Guid guid, [FromServices] ICustomerBusiness customerBusiness)
+        {
+            try
+            {
+                var customer = await customerBusiness.DeleteAsync(guid);
 
+                return new OkObjectResult(customer);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
