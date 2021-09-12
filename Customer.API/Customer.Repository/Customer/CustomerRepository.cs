@@ -29,7 +29,7 @@ namespace Customer.Repository.Customer
             }
         }
 
-        public override async Task<Guid?> InsertAsync(Models.Customer entity)
+        public override async Task<Guid?> InsertAsync(Guid? id, Models.Customer entity)
         {
             IDbTransaction transactionopen = null;
             var parameters = new DynamicParameters();
@@ -164,10 +164,5 @@ namespace Customer.Repository.Customer
             }
         }
 
-
-        public override Task<Guid?> InsertAsync(Guid? id, Models.Customer entity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

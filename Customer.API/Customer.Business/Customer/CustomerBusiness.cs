@@ -15,7 +15,6 @@ namespace Customer.Business.Customer
         private readonly IContactInformationRepository _ContactInformationRepository;
         private readonly IAddressRepository _AddressRepository;
 
-
         private readonly IConfiguration _configuration;
 
         public CustomerBusiness(IUnitOfWork unitOfWork, IConfiguration configuration)
@@ -53,18 +52,18 @@ namespace Customer.Business.Customer
         public async Task<Guid?> InsertAsync(Models.Customer model)
         {
             //ADD CUSTOMER 
-            var Id = await _CustomerRepository.InsertAsync(model);
+            var customerResponseId = await _CustomerRepository.InsertAsync(model.Id.Value, model);
 
             //ADD ADDRESS
-            var id = await _AddressRepository.InsertAsync(Id, model.Address);
+            var addressReponseId = await _AddressRepository.InsertAsync(customerResponseId, model.Address);
 
             //ADD CONTACT INFO
             foreach (var contactInfo in model.ContactInformation)
             {
-                var guid = _ContactInformationRepository.InsertAsync(Id, contactInfo);
+                var guid = _ContactInformationRepository.InsertAsync(addressReponseId, contactInfo);
             }
 
-            return Id;
+            return customerResponseId;
         }
 
         public async Task<IEnumerable<Models.Customer>> SearchAsync(string forename, string surename, string postcode, string emailAddress)
@@ -98,7 +97,7 @@ namespace Customer.Business.Customer
 
             //PERFOM UPDATE
 
-            List<Task<bool>> TaskList = new List<Task<bool>>
+            List<Task<bool>> TaskList = new()
             {
                 //UPDATE CUSTOMER AND ADDRESS RECORDS
                 _CustomerRepository.UpdateAsync(model),

@@ -13,8 +13,6 @@ namespace Customer.Repository.ContactInformation
         public ContactInformationRepository(string connection) : base(connection)
         { }
 
-       
-
         public async Task<IEnumerable<Models.ContactInformation>> Get(Guid CustomerId)
         {
             try
@@ -101,11 +99,6 @@ namespace Customer.Repository.ContactInformation
         }
 
         public override Task<Models.ContactInformation> GetAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Task<Guid?> InsertAsync(Models.ContactInformation entity)
         {
             throw new NotImplementedException();
         }

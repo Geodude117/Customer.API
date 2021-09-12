@@ -65,11 +65,6 @@ namespace Customer.Repository.Address
             }
         }
 
-        public override Task<Guid?> InsertAsync(Models.Address entity)
-        {
-            throw new NotImplementedException();
-        }
-
         public override Task<bool> UpdateAsync(Models.Address entity)
         {
             throw new NotImplementedException();
