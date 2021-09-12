@@ -24,7 +24,7 @@ namespace Customer.API.Validators
 
             RuleForEach(x => x.ContactInformation).SetValidator(new ContactInformationValidator());
 
-            RuleFor(x => x.ContactInformation).Must(x => x.Count() >= 1).WithMessage("Must have 1 type of contact information, either EmailAddress or Telelphone");
+            RuleFor(x => x.ContactInformation).NotNull().WithMessage("Must have 1 type of contact information, either EmailAddress or Telelphone");
 
         }
 

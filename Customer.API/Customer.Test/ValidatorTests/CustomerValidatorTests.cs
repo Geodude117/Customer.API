@@ -3,6 +3,7 @@ using FluentValidation.TestHelper;
 using Customer.API.Validators;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Customer.Tests.ValidatorTests
 {
@@ -19,7 +20,7 @@ namespace Customer.Tests.ValidatorTests
         }
 
         [TestInitialize]
-        public void InitializeTest()
+        public void Initialize_test()
         {
             validator = new CustomerValidator();
 
@@ -56,7 +57,17 @@ namespace Customer.Tests.ValidatorTests
         }
 
         [TestMethod]
-        public void Should_have_no_error_as_customer_model_is_valid()
+        public void Should_have_errors_as_contact_information_is_null()
+        {
+            Customer.ContactInformation = null;
+
+            var result = validator.TestValidate(Customer);
+
+            Assert.IsFalse(result.IsValid);
+        }
+
+        [TestMethod]
+        public void Should_have_no_errors_as_contact_information_as_1_valid_type()
         {
             var result = validator.TestValidate(Customer);
 
@@ -64,7 +75,15 @@ namespace Customer.Tests.ValidatorTests
         }
 
         [TestMethod]
-        public void Should_have_error_when_Surname_is_null()
+        public void Should_have_no_errors_as_customer_model_is_valid()
+        {
+            var result = validator.TestValidate(Customer);
+
+            Assert.IsTrue(result.IsValid);
+        }
+
+        [TestMethod]
+        public void Should_have_errors_when_Surname_is_null()
         {
             //UPDATE SURNAME
             Customer.Surename = "";
@@ -77,7 +96,7 @@ namespace Customer.Tests.ValidatorTests
         }
 
         [TestMethod]
-        public void Should_have_no_error_when_Date_Of_Birth_is_null()
+        public void Should_have_no_errors_when_Date_Of_Birth_is_null()
         {
             //UPDATE DOB
             Customer.DateOfBirth = "";
@@ -88,7 +107,7 @@ namespace Customer.Tests.ValidatorTests
         }
 
         [TestMethod]
-        public void Should_have_no_error_when_Date_Of_Birth_is_valid_format_01()
+        public void Should_have_no_errors_when_Date_Of_Birth_is_valid_format_01()
         { 
             //UPDATE DOB - FORMAT - DD/MM/YYYY
             Customer.DateOfBirth = "05/05/2020";
@@ -99,7 +118,7 @@ namespace Customer.Tests.ValidatorTests
         }
 
         [TestMethod]
-        public void Should_have_no_error_when_Date_Of_Birth_is_valid_format_02()
+        public void Should_have_no_errors_when_Date_Of_Birth_is_valid_format_02()
         {
             //UPDATE DOB - FORMAT - YYYY/MM/DD
             Customer.DateOfBirth = "1996/10/17";
@@ -110,7 +129,7 @@ namespace Customer.Tests.ValidatorTests
         }
 
         [TestMethod]
-        public void Should_have_no_error_when_Date_Of_Birth_is_valid_format_03()
+        public void Should_have_no_errors_when_Date_Of_Birth_is_valid_format_03()
         {
             //UPDATE DOB - FORMAT - DD/MM/YYYY HH:MM
             Customer.DateOfBirth = "05/05/2020 12:12";
@@ -121,7 +140,7 @@ namespace Customer.Tests.ValidatorTests
         }
 
         [TestMethod]
-        public void Should_have_no_error_when_Date_Of_Birth_is_valid_format_04()
+        public void Should_have_no_errors_when_Date_Of_Birth_is_valid_format_04()
         {
             //UPDATE DOB - FORMAT - YYYY/MM/DD HH:MM
             Customer.DateOfBirth = "2020/05/05 12:12";
@@ -152,6 +171,31 @@ namespace Customer.Tests.ValidatorTests
 
             Assert.IsFalse(result.IsValid);
         }
+
+        [TestMethod]
+        public void Should_have_errors_when_Psotcode_is_not_valid()
+        {
+            //UPDATE POSTCODE 
+            Customer.Address.Postcode = "DWDDWDWDWD";
+
+            var result = validator.TestValidate(Customer);
+
+            Assert.IsFalse(result.IsValid);
+        }
+
+        [TestMethod]
+        public void Should_have_no_errors_when_Psotcode_is_valid()
+        {
+            //UPDATE POSTCODE 
+            Customer.Address.Postcode = "HU5 2SY";
+
+            var result = validator.TestValidate(Customer);
+
+            Assert.IsTrue(result.IsValid);
+        }
+
+
+
 
     }
 }
