@@ -20,14 +20,19 @@ namespace Customer.Business.ContactInformation
             _configuration = configuration;
         }
 
-        public Task<IEnumerable<Models.ContactInformation>> GetAsync(Guid id)
+        public Task<IEnumerable<Models.ContactInformation>> GetAllAsync()
         {
-            return _ContactInformationRepository.Get(id);
+            return _ContactInformationRepository.GetAllAsync();
         }
 
-        public Task<Guid?> InsertAsync(Models.ContactInformation model)
+        public Task<IEnumerable<Models.ContactInformation>> GetAsync(Guid id)
         {
-            return _ContactInformationRepository.InsertAsync(model);
+            return _ContactInformationRepository.GetAllForCustomerId(id);
+        }
+
+        public Task<Guid?> InsertAsync(Guid? guid, Models.ContactInformation model)
+        {
+            return _ContactInformationRepository.InsertAsync(guid,model);
 
         }
     }

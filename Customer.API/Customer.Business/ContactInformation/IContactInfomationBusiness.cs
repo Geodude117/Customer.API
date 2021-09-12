@@ -8,9 +8,10 @@ namespace Customer.Business.ContactInformation
 {
     public interface IContactInfomationBusiness
     {
+        Task<IEnumerable<Models.ContactInformation>> GetAllAsync();
 
         Task<IEnumerable<Models.ContactInformation>> GetAsync(Guid id);
 
-        Task<Guid?> InsertAsync(Models.ContactInformation model);
+        Task<Guid?> InsertAsync(Guid? guid, Models.ContactInformation model);
     }
 }

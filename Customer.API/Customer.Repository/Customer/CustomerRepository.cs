@@ -13,6 +13,20 @@ namespace Customer.Repository.Customer
     {
         public CustomerRepository(string connection) : base(connection)
         { }
+        public override async Task<IEnumerable<Models.Customer>> GetAllAsync()
+        {
+            try
+            {
+                using (IDbConnection connection = Connection)
+                {
+                    return (await connection.QueryAsync<Models.Customer>("[dbo].[Customer_Get_All]", commandType: CommandType.StoredProcedure));
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+        }
 
         public override async Task<Models.Customer> GetAsync(Guid Id)
         {
@@ -29,7 +43,7 @@ namespace Customer.Repository.Customer
             }
         }
 
-        public override async Task<Guid?> InsertAsync(Models.Customer entity)
+        public override async Task<Guid?> InsertAsync(Guid? id, Models.Customer entity)
         {
             IDbTransaction transactionopen = null;
             var parameters = new DynamicParameters();
@@ -50,14 +64,15 @@ namespace Customer.Repository.Customer
                            parameters,
                            commandType: CommandType.StoredProcedure,
                            transaction: transactionopen));
-                        transactionopen.Commit();
 
                         if (result == 1)
                         {
+                            transactionopen.Commit();
                             return parameters.Get<Guid>("@CustomerId");
                         }
                         else
                         {
+                            transactionopen.Rollback();
                             return null;
                         }
                     }
@@ -77,7 +92,7 @@ namespace Customer.Repository.Customer
 
             parameters.Add("@Forename", value: forename, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@Surename", value: surename, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@DateOfBirth", value: postcode, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@PostCode", value: postcode, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@EmailAddress", value: emailAddress, dbType: DbType.String, direction: ParameterDirection.Input);
 
             try
@@ -162,12 +177,6 @@ namespace Customer.Repository.Customer
                 transactionopen.Rollback();
                 throw ex;
             }
-        }
-
-
-        public override Task<Guid?> InsertAsync(Guid? id, Models.Customer entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }

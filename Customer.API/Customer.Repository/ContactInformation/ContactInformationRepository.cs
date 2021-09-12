@@ -12,10 +12,22 @@ namespace Customer.Repository.ContactInformation
     {
         public ContactInformationRepository(string connection) : base(connection)
         { }
+        public override async Task<IEnumerable<Models.ContactInformation>> GetAllAsync()
+        {
+            try
+            {
+                using (IDbConnection connection = Connection)
+                {
+                    return (await connection.QueryAsync<Models.ContactInformation>("[dbo].[ContactInformation_Get_All]", commandType: CommandType.StoredProcedure));
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+        }
 
-       
-
-        public async Task<IEnumerable<Models.ContactInformation>> Get(Guid CustomerId)
+        public async Task<IEnumerable<Models.ContactInformation>> GetAllForCustomerId(Guid CustomerId)
         {
             try
             {
@@ -50,14 +62,15 @@ namespace Customer.Repository.ContactInformation
                             parameters,
                             commandType: CommandType.StoredProcedure,
                             transaction: transactionopen)) != 0;
-
                         if (result)
                         {
+                            transactionopen.Commit();
                             return parameters.Get<Guid>("@CustomerId");
 
                         }
                         else
                         {
+                            transactionopen.Rollback();
                             return null;
                         }
                     }
@@ -100,20 +113,16 @@ namespace Customer.Repository.ContactInformation
             }
         }
 
-        public override Task<Models.ContactInformation> GetAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Task<Guid?> InsertAsync(Models.ContactInformation entity)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public override Task<bool> UpdateAsync(Models.ContactInformation entity)
         {
             throw new NotImplementedException();
         }
 
+        public override Task<Models.ContactInformation> GetAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
