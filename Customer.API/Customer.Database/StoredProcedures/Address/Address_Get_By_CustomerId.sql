@@ -7,5 +7,6 @@ AS
       ,[City ]
       ,[Postcode]
       ,[CustomerId]
-  FROM [dbo].[Address]
+  FROM [dbo].[Address] A
+  WHERE A.CustomerId = @CustomerId
 RETURN 0

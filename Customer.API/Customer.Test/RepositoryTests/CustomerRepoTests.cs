@@ -1,15 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Customer.Repository;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Customer.Tests
+namespace Customer.Tests.RepositoryTests
 {
     [TestClass]
 
     public class CustomerRepoTests
     {
+
+        [TestMethod]
+        public void GetAllCustomer()
+        {
+            List<Models.Customer> customerList = new List<Models.Customer>();
+
+            Models.Customer Customer1 = new Models.Customer
+            {
+                Id = Guid.NewGuid(),
+                ForeName = "Geovan",
+                Surename = "Inacay",
+                DateOfBirth = "17/10/1996"
+            };
+
+            Models.Customer Customer2 = new Models.Customer
+            {
+                Id = Guid.NewGuid(),
+                ForeName = "James",
+                Surename = "Jones",
+                DateOfBirth = "10/11/1993"
+            };
+
+            customerList.Add(Customer1);
+            customerList.Add(Customer2);
+
+            var expectedCustomerCount = customerList.Count;
+
+            var _mockUnitOfWork = new Mock<IUnitOfWork>();
+
+            _mockUnitOfWork.Setup(x => x.CustomerRepo.GetAllAsync()).ReturnsAsync(customerList);
+
+            var mockCustomerRepo = _mockUnitOfWork.Object.CustomerRepo;
+
+            var customerGetResponse = mockCustomerRepo.GetAllAsync().Result;
+
+            Assert.IsNotNull(customerGetResponse);
+            Assert.IsInstanceOfType(customerGetResponse, typeof(IEnumerable<Models.Customer>));
+            Assert.AreEqual(customerGetResponse.Count(), expectedCustomerCount);
+
+        }
+
         [TestMethod]
         public void GetCustomerById()
         {

@@ -14,6 +14,21 @@ namespace Customer.Repository.Address
         public AddressRepository(string connection) : base(connection)
         { }
 
+        public override async Task<IEnumerable<Models.Address>> GetAllAsync()
+        {
+            try
+            {
+                using (IDbConnection connection = Connection)
+                {
+                    return (await connection.QueryAsync<Models.Address>("[dbo].[Address_Get_All]", commandType: CommandType.StoredProcedure));
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+        }
+
         public override async Task<Models.Address> GetAsync(Guid CustomerId)
         {
             try

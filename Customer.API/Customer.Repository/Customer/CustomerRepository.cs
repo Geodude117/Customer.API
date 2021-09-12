@@ -13,6 +13,20 @@ namespace Customer.Repository.Customer
     {
         public CustomerRepository(string connection) : base(connection)
         { }
+        public override async Task<IEnumerable<Models.Customer>> GetAllAsync()
+        {
+            try
+            {
+                using (IDbConnection connection = Connection)
+                {
+                    return (await connection.QueryAsync<Models.Customer>("[dbo].[Customer_Get_All]", commandType: CommandType.StoredProcedure));
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+        }
 
         public override async Task<Models.Customer> GetAsync(Guid Id)
         {
@@ -50,14 +64,15 @@ namespace Customer.Repository.Customer
                            parameters,
                            commandType: CommandType.StoredProcedure,
                            transaction: transactionopen));
-                        transactionopen.Commit();
 
                         if (result == 1)
                         {
+                            transactionopen.Commit();
                             return parameters.Get<Guid>("@CustomerId");
                         }
                         else
                         {
+                            transactionopen.Rollback();
                             return null;
                         }
                     }
@@ -163,6 +178,5 @@ namespace Customer.Repository.Customer
                 throw ex;
             }
         }
-
     }
 }

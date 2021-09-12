@@ -16,6 +16,21 @@ namespace Customer.API.Controllers
 
         //Search for customer by forename, surname, postcode, or email address
 
+        [HttpGet()]
+        public async Task<ActionResult<IEnumerable<Models.Customer>>> GetAll([FromServices] ICustomerBusiness customerBusiness)
+        {
+            try
+            {
+                var getAllResult = await customerBusiness.GetAllAsync();
+
+                return new OkObjectResult(getAllResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Models.Customer>>> Search([FromQuery] string forename, [FromQuery] string surename, [FromQuery] string postcode, [FromQuery] string emailAddress, [FromServices] ICustomerBusiness customerBusiness)
         {

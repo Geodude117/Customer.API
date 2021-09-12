@@ -26,6 +26,26 @@ namespace Customer.Business.Customer
             _configuration = configuration;
         }
 
+        public async Task<IEnumerable<Models.Customer>> GetAllAsync()
+        {
+            //GET ALL CUSTOMERS 
+            var customers = await _CustomerRepository.GetAllAsync();
+
+            foreach (var customer in customers)
+            {
+                //POPULATE ADDRESS
+
+                var address = await _AddressRepository.GetAsync(customer.Id.Value);
+                customer.Address = address;
+
+                //POPULATE CONTACT INFO
+                var contactInfoList = await _ContactInformationRepository.GetAllForCustomerId(customer.Id.Value);
+                customer.ContactInformation = (ICollection<Models.ContactInformation>)contactInfoList;
+            }
+
+            return customers;
+        }
+
         public async Task<Models.Customer> GetAsync(Guid id)
         {
             //CREATE OBJECTS
@@ -37,7 +57,7 @@ namespace Customer.Business.Customer
             address = await  _AddressRepository.GetAsync(id);
 
             //GET CONTACT INFO
-            contactInfoList = await _ContactInformationRepository.Get(id);
+            contactInfoList = await _ContactInformationRepository.GetAllForCustomerId(id);
 
             //GET CUSTOMER
             customer = await _CustomerRepository.GetAsync(id);
@@ -60,7 +80,7 @@ namespace Customer.Business.Customer
             //ADD CONTACT INFO
             foreach (var contactInfo in model.ContactInformation)
             {
-                var guid = _ContactInformationRepository.InsertAsync(addressReponseId, contactInfo);
+                var guid = await _ContactInformationRepository.InsertAsync(addressReponseId, contactInfo);
             }
 
             return customerResponseId;
@@ -79,7 +99,6 @@ namespace Customer.Business.Customer
             }
             return customerList;
         }
-
 
         public async Task<bool> DeleteAsync(Guid id)
         {
@@ -118,5 +137,6 @@ namespace Customer.Business.Customer
 
             return updateResults;
         }
+
     }
 }

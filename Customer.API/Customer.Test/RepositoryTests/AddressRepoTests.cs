@@ -1,16 +1,66 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Customer.Repository;
 using Customer.Repository.Address;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Customer.Tests
+namespace Customer.Tests.RepositoryTests
 {
     [TestClass]
     public class AddressRepoTests
     {
-       
+        [TestMethod]
+        public void GetAllAddress()
+        {
+
+            List<Models.Address> addresses = new List<Models.Address>();
+
+            Models.Address Address1 = new Models.Address
+            {
+                HouseNo = 1,
+                Street = "Street 1",
+                Postcode = "HU5 123",
+                City = "Hull"
+            };
+
+            Models.Address Address2 = new Models.Address
+            {
+                HouseNo = 1,
+                Street = "Street 2",
+                Postcode = "HU5 456",
+                City = "Hull"
+            };
+
+            Models.Address Address3 = new Models.Address
+            {
+                HouseNo = 1,
+                Street = "Street 3",
+                Postcode = "HU5 789",
+                City = "Hull"
+            };
+
+            addresses.Add(Address1);
+            addresses.Add(Address2);
+            addresses.Add(Address3);
+
+            var expectedAddressCount = addresses.Count;
+
+            var _mockUnitOfWork = new Mock<IUnitOfWork>();
+
+            _mockUnitOfWork.Setup(x => x.AddressRepo.GetAllAsync()).ReturnsAsync(addresses);
+
+            var mockAddressRepo = _mockUnitOfWork.Object.AddressRepo;
+
+            IEnumerable<Models.Address> testAddresses = mockAddressRepo.GetAllAsync().Result;
+
+            Assert.IsNotNull(testAddresses);
+            Assert.AreEqual(expectedAddressCount, testAddresses.Count()); 
+        }
+
+
         [TestMethod]
         public void GetAddressById()
         {
@@ -58,7 +108,6 @@ namespace Customer.Tests
             Assert.IsNotNull(addressInsertResult);
             Assert.IsInstanceOfType(addressInsertResult, typeof(Guid?));
             Assert.AreEqual(addressInsertResult, _guid);
-
         }
 
         [TestMethod]
@@ -85,8 +134,6 @@ namespace Customer.Tests
             Assert.IsNotNull(addressUpdateResult);
             Assert.IsInstanceOfType(addressUpdateResult, typeof(bool));
             Assert.AreEqual(addressUpdateResult, expectedUpdateResult);
-
         }
-
     }
 }
