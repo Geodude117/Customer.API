@@ -8,6 +8,8 @@ namespace Customer.Models
     {
         public Customer()
         {
+            this.Address = new Models.Address();
+            this.ContactInformation = new List<Models.ContactInformation>();
         }
 
         public Guid? Id { get; set; }
@@ -16,7 +18,6 @@ namespace Customer.Models
         public string DateOfBirth { get; set; }
         public Address Address { get; set; }
         public IEnumerable<ContactInformation> ContactInformation { get; set; }
-
 
         public int CompareTo(Customer obj)
         {
