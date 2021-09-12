@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[Customer_Search]
     @Forename nvarchar(50),
 	@Surename nvarchar(50),
-	@DateOfBirth nvarchar(50),
+	@PostCode nvarchar(10),
 	@EmailAddress nvarchar(50)
 AS
 	
@@ -9,7 +9,7 @@ DECLARE @results TABLE (Id uniqueidentifier not null)
 
 	--SEARCH INSIDE CUSTOMER TABLE
 
-	IF (@Forename is not null or @Surename is not null or @DateOfBirth is not null )
+	IF (@Forename is not null or @Surename is not null )
 	BEGIN
 		INSERT INTO @results
 			SELECT TOP 100
@@ -19,9 +19,20 @@ DECLARE @results TABLE (Id uniqueidentifier not null)
 			WHERE
 				(@Forename = CU.Forename)
 			or (@Surename = CU.Surename)
-			or (@DateOfBirth = CU.DateOfBirth)
 	END
 
+	--SEARCH INSIDE ADDRESS TABLE
+
+	IF (@PostCode is not null)
+	BEGIN
+		INSERT INTO @results
+			SELECT TOP 100
+				AD.CustomerId
+			FROM
+				dbo.[Address] AD
+			WHERE
+				(@PostCode = AD.Postcode)
+	END
 
 	--SEARCH INSIDE CONTACT INformation table - (EMAIL ADDRESS)
 

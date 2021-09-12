@@ -1,8 +1,11 @@
-﻿using Customer.Business.Customer;
+﻿using Customer.API.Validators;
+using Customer.Business.Customer;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 
@@ -15,7 +18,6 @@ namespace Customer.API.Controllers
         private readonly ILogger<CustomerController> _logger;
 
         //Search for customer by forename, surname, postcode, or email address
-
         [HttpGet()]
         public async Task<ActionResult<IEnumerable<Models.Customer>>> GetAll([FromServices] ICustomerBusiness customerBusiness)
         {
@@ -54,13 +56,20 @@ namespace Customer.API.Controllers
 
         //Retrieve customer by ID
         [HttpGet("guid")]
-        public async Task<ActionResult<Models.Customer>> Get(Guid guid, [FromServices] ICustomerBusiness customerBusiness)
+        public async Task<ActionResult<Models.Customer>> Get(Guid? guid, [FromServices] ICustomerBusiness customerBusiness)
         {
             try
             {
-                var customer = await customerBusiness.GetAsync(guid);
+                if (guid != null)
+                {
+                    var customer = await customerBusiness.GetAsync(guid.Value);
 
-                return new OkObjectResult(customer);
+                    return new OkObjectResult(customer);
+                }
+                else
+                {
+                    return StatusCode(400, "No GUID was provided");
+                }
             }
             catch (Exception ex)
             {
@@ -70,24 +79,45 @@ namespace Customer.API.Controllers
 
         //Create a new customer
         [HttpPost]
-        public async Task<Guid?> Insert([FromBody] Models.Customer model, [FromServices] ICustomerBusiness customerBusiness)
-        {
-            var customer = await customerBusiness.InsertAsync(model);
-
-            return customer;
-        }
-
-        //Update an existing customer
-
-        //Delete a customer
-        [HttpDelete]
-        public async Task<ActionResult<Models.Customer>> Delete(Guid guid, [FromServices] ICustomerBusiness customerBusiness)
+        public async Task<ActionResult<Guid?>> Insert([FromBody] Models.Customer model, [FromServices] ICustomerBusiness customerBusiness, 
+            [FromServices] IValidator<Models.Customer> customerValidator)
         {
             try
             {
-                var customer = await customerBusiness.DeleteAsync(guid);
+                var result = customerValidator.Validate(model);
 
-                return new OkObjectResult(customer);
+                if (result.IsValid)
+                {
+                    var customer = await customerBusiness.InsertAsync(model);
+                    return new OkObjectResult(customer.Value);
+                }
+                else
+                {
+                    return StatusCode(400, result.Errors);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        //Delete a customer
+        [HttpDelete]
+        public async Task<ActionResult<Models.Customer>> Delete(Guid? guid, [FromServices] ICustomerBusiness customerBusiness)
+        {
+            try
+            {
+                if (guid != null)
+                {
+                    var customer = await customerBusiness.DeleteAsync(guid.Value);
+
+                    return new OkObjectResult(customer);
+                }
+                else
+                {
+                    return StatusCode(400, "No GUID was provided");
+                }
             }
             catch (Exception ex)
             {
@@ -97,20 +127,27 @@ namespace Customer.API.Controllers
 
         //Update a customer
         [HttpPut]
-        public async Task<ActionResult<Models.Customer>> Update([FromBody] Models.Customer model, [FromServices] ICustomerBusiness customerBusiness)
+        public async Task<ActionResult<Models.Customer>> Update([FromBody] Models.Customer model, [FromServices] ICustomerBusiness customerBusiness,
+            [FromServices] IValidator<Models.Customer> customerValidator)
         {
             try
             {
-                var customer = await customerBusiness.UpdateAsync(model);
+                var result = customerValidator.Validate(model);
 
-                return new OkObjectResult(customer);
+                if (result.IsValid)
+                {
+                    var customer = await customerBusiness.UpdateAsync(model);
+                    return new OkObjectResult(customer);
+                }
+                else
+                {
+                    return StatusCode(400, result.Errors);
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
         }
-
-
     }
 }

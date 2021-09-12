@@ -8,7 +8,7 @@ AS
 	INSERT INTO [dbo].[Address]
            ([HouseNo]
            ,[Street]
-           ,[City ]
+           ,[City]
            ,[Postcode]
            ,[CustomerId])
      VALUES

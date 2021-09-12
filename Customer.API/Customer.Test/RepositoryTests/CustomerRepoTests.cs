@@ -13,7 +13,7 @@ namespace Customer.Tests.RepositoryTests
     {
 
         [TestMethod]
-        public void GetAllCustomer()
+        public void Get_all_customers()
         {
             List<Models.Customer> customerList = new List<Models.Customer>();
 
@@ -53,7 +53,7 @@ namespace Customer.Tests.RepositoryTests
         }
 
         [TestMethod]
-        public void GetCustomerById()
+        public void Get_customer_By_id()
         {
             Models.Customer Customer = new Models.Customer
             {
@@ -76,7 +76,7 @@ namespace Customer.Tests.RepositoryTests
         }
 
         [TestMethod]
-        public void InsertCustomer()
+        public void Insert_customer()
         {
             Models.Customer Customer = new Models.Customer
             {
@@ -99,7 +99,7 @@ namespace Customer.Tests.RepositoryTests
         }
 
         [TestMethod]
-        public void UpdateCustomer()
+        public void Update_customer()
         {
             Models.Customer Customer = new Models.Customer
             {

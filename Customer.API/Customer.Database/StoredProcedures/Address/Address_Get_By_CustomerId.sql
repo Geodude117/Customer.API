@@ -4,7 +4,7 @@ AS
 	SELECT [Id]
       ,[HouseNo]
       ,[Street]
-      ,[City ]
+      ,[City]
       ,[Postcode]
       ,[CustomerId]
   FROM [dbo].[Address] A

@@ -13,9 +13,8 @@ namespace Customer.Tests.RepositoryTests
     public class AddressRepoTests
     {
         [TestMethod]
-        public void GetAllAddress()
+        public void Get_all_address()
         {
-
             List<Models.Address> addresses = new List<Models.Address>();
 
             Models.Address Address1 = new Models.Address
@@ -60,9 +59,8 @@ namespace Customer.Tests.RepositoryTests
             Assert.AreEqual(expectedAddressCount, testAddresses.Count()); 
         }
 
-
         [TestMethod]
-        public void GetAddressById()
+        public void Get_address_by_id()
         {
             Models.Address Address = new Models.Address
             {
@@ -85,7 +83,7 @@ namespace Customer.Tests.RepositoryTests
         }
 
         [TestMethod]
-        public void InsertAddress()
+        public void Insert_address()
         {
             Models.Address Address = new Models.Address
             {
@@ -111,7 +109,7 @@ namespace Customer.Tests.RepositoryTests
         }
 
         [TestMethod]
-        public void UpdateAddress()
+        public void Update_address()
         {
             Models.Address Address = new Models.Address
             {

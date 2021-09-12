@@ -11,20 +11,20 @@ namespace Customer.Tests.RepositoryTests
     public class ContactInformationRepoTests
     {
         [TestMethod]
-        public void GetAllContactInformation()
+        public void Get_all_contact_information()
         {
             List<Models.ContactInformation> contactInfoList = new List<Models.ContactInformation>();
 
             Models.ContactInformation contactInfo1 = new Models.ContactInformation
             {
-                Type = Models.ContactInfomationType.emailaddress.ToString().ToLower(),
+                Type = Models.ContactInfomationType.EmailAddress.ToString(),
                 Value = "geovaninacay@yahoo.com"
             };
 
             Models.ContactInformation contactInfo2 = new Models.ContactInformation
             {
-                Type = Models.ContactInfomationType.emailaddress.ToString().ToLower(),
-                Value = "test@yahoo.com"
+                Type = Models.ContactInfomationType.Telephone.ToString(),
+                Value = "0123456789"
             };
 
             contactInfoList.Add(contactInfo1);
@@ -45,13 +45,13 @@ namespace Customer.Tests.RepositoryTests
         }
 
         [TestMethod]
-        public void GetContactInformationById()
+        public void Get_contact_information_by_id()
         {
             List<Models.ContactInformation> contactInfoList = new List<Models.ContactInformation>();
 
             Models.ContactInformation contactInfo1 = new Models.ContactInformation
             {
-                Type = Models.ContactInfomationType.emailaddress.ToString().ToLower(),
+                Type = Models.ContactInfomationType.Telephone.ToString().ToLower(),
                 Value = "geovaninacay@yahoo.com"
             };
 

@@ -17,7 +17,7 @@ AS
 	UPDATE [dbo].[Address]
 	SET [HouseNo] = @HouseNo
       ,[Street] = @Street
-      ,[City ] = @City
+      ,[City] = @City
       ,[Postcode] = @Postcode
 	WHERE Address.CustomerId = @CustomerId
 

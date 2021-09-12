@@ -1,7 +1,10 @@
+using Customer.API.Validators;
 using Customer.Business.Address;
 using Customer.Business.ContactInformation;
 using Customer.Business.Customer;
 using Customer.Repository;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,8 +30,15 @@ namespace Customer.API
             services.AddTransient<IAddressBusiness, AddressBusiness>();
             services.AddTransient<IContactInfomationBusiness, ContactInfomationBusiness>();
             services.AddTransient<ICustomerBusiness, CustomerBusiness>();
+            
+            services.AddTransient<IValidator<Models.Customer>, CustomerValidator>();
+            services.AddTransient<IValidator<Models.ContactInformation>, ContactInformationValidator>();
 
             services.AddSingleton<IConfiguration>(x => Configuration);
+
+            services.AddMvc(setup => {
+                //...mvc setup...
+            }).AddFluentValidation();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

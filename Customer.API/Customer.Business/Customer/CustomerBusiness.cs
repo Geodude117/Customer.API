@@ -5,6 +5,7 @@ using Customer.Repository.Customer;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Customer.Business.Customer
@@ -92,6 +93,9 @@ namespace Customer.Business.Customer
 
            var customerIds = await _CustomerRepository.Search(forename, surename, postcode, emailAddress);
 
+           //REMOVES DUPLICATES
+            customerIds.Distinct();
+
             foreach (var id in customerIds)
             {
                 customerList.Add(await this.GetAsync(id));
@@ -108,7 +112,6 @@ namespace Customer.Business.Customer
         public async Task<bool> UpdateAsync(Models.Customer model)
         {
             //CHECK IF THE THERE ARE ANY DIFFERENCES IF NOT RETURN FALSE
-
             var oldCustomer = await this.GetAsync(model.Id.Value);
             var result = model.CompareTo(oldCustomer) > 0;
             if (!result)

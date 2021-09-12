@@ -80,4 +80,7 @@
     <Build Include="StoredProcedures\ContactInformation\ContactInformation_Get_All.sql" />
     <Build Include="StoredProcedures\Customer\Customer_Get_All.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Customer.Database.refactorlog" />
+  </ItemGroup>
 </Project>

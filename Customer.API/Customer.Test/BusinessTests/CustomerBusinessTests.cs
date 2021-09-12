@@ -37,13 +37,13 @@ namespace Customer.Tests.BusinessTests
 
             Models.ContactInformation contactInfo1 = new Models.ContactInformation
             {
-                Type = Models.ContactInfomationType.emailaddress.ToString().ToLower(),
+                Type = Models.ContactInfomationType.EmailAddress.ToString(),
                 Value = "geovaninacay@yahoo.com"
             };
 
             Models.ContactInformation contactInfo2 = new Models.ContactInformation
             {
-                Type = Models.ContactInfomationType.emailaddress.ToString().ToLower(),
+                Type = Models.ContactInfomationType.EmailAddress.ToString(),
                 Value = "test@yahoo.com"
             };
 
@@ -183,7 +183,7 @@ namespace Customer.Tests.BusinessTests
 
             Models.ContactInformation contactInfo = new Models.ContactInformation
             {
-                Type = Models.ContactInfomationType.emailaddress.ToString().ToLower(),
+                Type = Models.ContactInfomationType.EmailAddress.ToString(),
                 Value = "testtest@yahoo.com"
             };
 

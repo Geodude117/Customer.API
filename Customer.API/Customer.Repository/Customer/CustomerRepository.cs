@@ -92,7 +92,7 @@ namespace Customer.Repository.Customer
 
             parameters.Add("@Forename", value: forename, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@Surename", value: surename, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("@DateOfBirth", value: postcode, dbType: DbType.String, direction: ParameterDirection.Input);
+            parameters.Add("@PostCode", value: postcode, dbType: DbType.String, direction: ParameterDirection.Input);
             parameters.Add("@EmailAddress", value: emailAddress, dbType: DbType.String, direction: ParameterDirection.Input);
 
             try
